@@ -1,6 +1,6 @@
 <% @tweets.each do |e| %>
     <%= e.message %>
-    <%= e.like_tweets.count %>
+    ,いいねの数：<%= e.like_tweets.count %>
     <%= link_to '削除', tweet_path(e), data: {turbo_method: :delete} %>
    
     <% if session[:login_uid] %>
@@ -10,7 +10,11 @@
 <br>
 <% end %>
 
-<%= link_to "新規追加", new_tweet_path %><br>
-<%= link_to "ログイン", top_main_path %><br>
-<%= link_to "ログアウト", top_logout_path %><br>
-ログイン中UID：<%= session[:login_uid] %>
+<% if session[:login_uid] %>
+  <%= link_to "ツイートする", new_tweet_path %><br>
+  <%= link_to "ログアウト", top_logout_path %><br>
+  ログイン中UID：<%= session[:login_uid] %>
+<% else %>
+  <%= link_to "ログイン", top_main_path %><br>
+  ツイートするにはログインしてください
+<% end %>
