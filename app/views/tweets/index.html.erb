@@ -1,19 +1,35 @@
-<% @tweets.each do |e| %>
-    <%= e.message %>
-    ,いいねの数：<%= e.like_tweets.count %>
-    <%= link_to '削除', tweet_path(e), data: {turbo_method: :delete} %>
-   
-    <% if session[:login_uid] %>
-        <%= link_to 'いいね', likes_path(tweet_id: e.id), data: { turbo_method: :post } %>
-        <%= link_to 'いいね削除', like_path(e), data: { turbo_method: :delete } %>
+<% @tweets.each do |tweet| %>
+  <div class="tweet">
+    <p><%= link_to tweet.user.uid, user_path(tweet.user) %></p>
+    <p><%= tweet.message %></p>
+    <p>いいねの数：<%= tweet.likes.count %></p>
+
+    <% if session[:user_id] == tweet.user_id %>
+      <%= button_to "削除", tweet_path(tweet), method: :delete, data: { confirm: "削除しますか？" } %>
     <% end %>
-<br>
+
+    <% if session[:user_id] %>
+      <% like = tweet.likes.find_by(user_id: session[:user_id]) %>
+      <% if like %>
+        <%= button_to "いいね削除",
+                      like_path(like),
+                      method: :delete,
+                      params: { redirect_to: request.fullpath } %>
+      <% else %>
+        <%= button_to "いいね",
+                      likes_path(tweet_id: tweet.id),
+                      method: :post,
+                      params: { redirect_to: request.fullpath } %>
+      <% end %>
+    <% end %>
+  </div>
+  <br>
 <% end %>
 
-<% if session[:login_uid] %>
+<% if session[:user_id] %>
   <%= link_to "ツイートする", new_tweet_path %><br>
   <%= link_to "ログアウト", top_logout_path %><br>
-  ログイン中UID：<%= session[:login_uid] %>
+  ログイン中UID：<%= User.find(session[:user_id]).uid %>
 <% else %>
   <%= link_to "ログイン", top_main_path %><br>
   ツイートするにはログインしてください

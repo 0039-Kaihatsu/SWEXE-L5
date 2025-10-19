@@ -1,0 +1,29 @@
+<h1><%= @user.uid %> さんのツイート一覧</h1>
+
+<%= link_to "トップに戻る", root_path %>
+
+<% @tweets.each do |tweet| %>
+  <div class="tweet">
+    <p><%= tweet.message %></p>
+    <p>いいね：<%= tweet.likes.count %></p>
+
+    <% if current_user %>
+      <% like = tweet.likes.find_by(user_id: current_user.id) %>
+      <% if like %>
+        <%= button_to "いいね削除",
+                      like_path(like),
+                      method: :delete,
+                      params: { redirect_to: request.fullpath },
+                      class: "btn btn-sm btn-warning" %>
+      <% else %>
+        <%= button_to "いいね",
+                      likes_path(tweet_id: tweet.id),
+                      method: :post,
+                      params: { redirect_to: request.fullpath },
+                      class: "btn btn-sm btn-primary" %>
+      <% end %>
+    <% end %>
+  </div>
+  <br>
+<% end %>
+

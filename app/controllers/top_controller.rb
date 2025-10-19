@@ -8,21 +8,17 @@ class TopController < ApplicationController
   end
 
   def login
-    uid = params[:uid]
-    pass = params[:pass]
-
-    user = User.find_by(uid: uid)
-
-    if user && BCrypt::Password.new(user.pass) == pass
-      session[:login_uid] = uid
-      redirect_to root_path
+    user = User.find_by(uid: params[:uid])
+    if user && BCrypt::Password.new(user.pass) == params[:pass]
+      session[:user_id] = user.id
+      redirect_to tweets_path
     else
-      render "error", status: 422
+      redirect_to top_main_path, alert: "ログイン情報が正しくありません"
     end
   end
-
+  
   def logout
-    session.delete(:login_uid)
-    redirect_to root_path
+    reset_session
+    redirect_to top_main_path, notice: "ログアウトしました"
   end
 end

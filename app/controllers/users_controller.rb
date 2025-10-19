@@ -8,22 +8,23 @@ class UsersController < ApplicationController
   end
 
   def create
-    uid = params[:user][:uid]
-    pass = params[:user][:pass]
+    @user = User.new(uid: params[:user][:uid], pass: BCrypt::Password.create(params[:user][:pass]))
 
-    u = User.new(uid: uid, pass: BCrypt::Password.create(pass))
-
-    if u.save
-      redirect_to users_path, notice: "ユーザーを作成しました"
+    if @user.save
+      redirect_to top_main_path, notice: "ユーザーを作成しました"
     else
       render :new, status: 422
     end
   end
 
-
   def destroy
     u = User.find(params[:id])
     u.destroy
-    redirect_to users_path: "ユーザーを削除しました"
+    redirect_to users_path, notice: "ユーザーを削除しました"
+  end
+
+  def show
+    @user = User.find(params[:id])
+    @tweets = @user.tweets.includes(:likes)
   end
 end
