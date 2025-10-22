@@ -9,9 +9,10 @@ class TopController < ApplicationController
 
   def login
     user = User.find_by(uid: params[:uid])
-    if user && BCrypt::Password.new(user.pass) == params[:pass]
+
+    if user&.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to tweets_path
+      redirect_to tweets_path, notice: "ログインしました"
     else
       redirect_to top_main_path, alert: "ログイン情報が正しくありません"
     end

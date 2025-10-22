@@ -1,10 +1,15 @@
 <% @tweets.each do |tweet| %>
   <div class="tweet">
-    <p><%= link_to tweet.user.uid, user_path(tweet.user) %></p>
+    <% if tweet.user.present? %>
+      <p><%= link_to tweet.user.uid, user_path(tweet.user) %></p>
+    <% else %>
+      <p>（不明なユーザー）</p>
+    <% end %>
+
     <p><%= tweet.message %></p>
     <p>いいねの数：<%= tweet.likes.count %></p>
 
-    <% if session[:user_id] == tweet.user_id %>
+    <% if session[:user_id] && tweet.user_id == session[:user_id] %>
       <%= button_to "削除", tweet_path(tweet), method: :delete, data: { confirm: "削除しますか？" } %>
     <% end %>
 
@@ -29,7 +34,14 @@
 <% if session[:user_id] %>
   <%= link_to "ツイートする", new_tweet_path %><br>
   <%= link_to "ログアウト", top_logout_path %><br>
-  ログイン中UID：<%= User.find(session[:user_id]).uid %>
+
+  <%# current_user を使うとより安全 %>
+  <% if (user = User.find_by(id: session[:user_id])) %>
+    ログイン中UID：<%= user.uid %>
+  <% else %>
+    ログイン中UID：不明
+  <% end %>
+
 <% else %>
   <%= link_to "ログイン", top_main_path %><br>
   ツイートするにはログインしてください

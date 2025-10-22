@@ -1,12 +1,22 @@
 <%= form_with model: @user, local: true do |f| %>
-  <%= f.label :uid, 'UID' %>
-  <%= f.text_field :uid %>
+  <p>
+    <%= f.label :uid, 'UID' %><br>
+    <%= f.text_field :uid %>
+  </p>
 
-  <%= f.label :pass, 'PASS' %>
-  <%= f.password_field :pass %>
+  <p>
+    <%= f.label :password, 'パスワード' %><br>
+    <%= f.password_field :password %>
+  </p>
 
-  <%= f.submit '作成' %>
+  <p>
+    <%= f.label :password_confirmation, 'パスワード（確認）' %><br>
+    <%= f.password_field :password_confirmation %>
+  </p>
+
+  <p>
+    <%= f.submit '作成' %>
+  </p>
 <% end %>
 
 <%= link_to "戻る", top_main_path %>
-
