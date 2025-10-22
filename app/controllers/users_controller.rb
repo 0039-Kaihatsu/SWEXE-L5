@@ -16,6 +16,7 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to top_main_path, notice: "ユーザーを作成しました"
     else
+      flash.now[:alert] = @user.errors.full_messages.join(", ")
       render :new, status: :unprocessable_entity
     end
   end

@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :likes, only: [:create, :destroy]
   
-  resources :users, only: [:new, :create, :show]
+  resources :users, only: [:new, :create, :show,:index, :destroy]
 
 
 end

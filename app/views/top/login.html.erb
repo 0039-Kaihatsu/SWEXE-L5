@@ -9,11 +9,8 @@
     <%= f.password_field :password %>
   </p>
 
-  <p>
-    <%= f.label :password_confirmation, 'パスワード（確認）' %><br>
-    <%= f.password_field :password_confirmation %>
-  </p>
 <%= f.submit 'ログイン' %>
 <% end %>
 
 <%= link_to "ユーザー登録", new_user_path %>
+<%= link_to "ユーザ一覧" , users_path %>
